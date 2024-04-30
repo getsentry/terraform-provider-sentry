@@ -1,5 +1,17 @@
 # Terraform Provider Sentry
 
+<br><br>
+
+- ⚠️ This repo is a weekly backup of the [Terraform provider](https://registry.terraform.io/providers/jianyuan/sentry/latest) built and maintained by [Jian Yuan](https://github.com/jianyuan).
+- 🤝 **Development work for the provider is officially sponsored by Sentry.**
+- 🪲 Please create bug reports, feature requests on the main branch at [jianyuan/terraform-provider-sentry](https://github.com/jianyuan/terraform-provider-sentry).
+
+<br><br>
+
+---
+
+<br><br>
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/jianyuan/terraform-provider-sentry)](https://goreportcard.com/report/github.com/jianyuan/terraform-provider-sentry)
 
 <a href="https://sentry.io/?utm_source=terraform&utm_medium=docs" target="_blank">
