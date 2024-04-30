@@ -1,0 +1,18 @@
+# https://github.com/marketplace/actions/rebase-upstream
+
+name: Rebase Upstream
+on:
+  workflow_dispatch: # enable manual runs
+  schedule:
+    - cron: "0 0 * * 1" # run once on Monday
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 10 # greater than the number of commits you made
+      - uses: imba-tjd/rebase-upstream-action@0.5
+        with:
+          upstream: jianyuan/terraform-provider-sentry
+          branch: main
