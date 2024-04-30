@@ -1,0 +1,59 @@
+name: Check Upstream for New Releases
+
+on:
+  workflow_dispatch: # enable manual runs
+  schedule:
+    - cron: "0 0 * * 0" # run once on Sunday
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Latest Release
+        id: latest_release
+        uses: abatilo/release-info-action@v1.3.3
+        with:
+          owner: jianyuan
+          repo: terraform-provider-sentry
+
+      - name: Example of consumption of the output
+        env:
+          LATEST: ${{ steps.latest_release.outputs.latest_tag }}
+          LATEST_DATE: ${{ steps.latest_release.outputs.latest_tag_published_at }}
+        run: |
+          echo "Version $LATEST was released at $LATEST_DATE"
+
+      - name: Check if release branch exists
+        id: check_branch
+        shell: bash
+        env:
+          LATEST_TAG: ${{ steps.latest_release.outputs.latest_tag }}
+        run: |
+          set -o errexit
+          set -o pipefail
+
+          BRANCH_NAME="releases/${LATEST_TAG}"
+          echo $LATEST_TAG
+          echo $BRANCH_NAME
+
+          BRANCHES=$(curl https://api.github.com/repos/getsentry/terraform-provider-sentry/branches)
+
+
+          # latest_tag=$(echo "$release_json" | jq -r '.tag_name')
+          # latest_tag_published_at=$(echo "$release_json" | jq -r '.published_at')
+          # target_commitish=$(echo "$release_json" | jq -r '.target_commitish')
+
+          # echo "latest_tag: $latest_tag"
+          # echo "latest_tag_published_at: $latest_tag_published_at"
+          # echo "target_commitish: $target_commitish"
+
+          # echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+          # echo "latest_tag_published_at=$latest_tag_published_at" >> $GITHUB_OUTPUT
+          # echo "target_commitish=$target_commitish" >> $GITHUB_OUTPUT
+
+      - name: Create branch if new release
+        if: steps.check_branch.outputs.script != 'old release'
+        run: |
+          git checkout -b `releases/${steps.check_release.outputs.script}`
+          git push origin head
